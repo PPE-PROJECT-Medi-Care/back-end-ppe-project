@@ -1,0 +1,37 @@
+version: "3.6"
+
+services:
+  departementdb:
+    container_name: departementdb
+    image: mysql
+    restart: always
+    volumes:
+      - data_dept:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: departementdb
+    networks:
+      mysubnet:
+        aliases:
+        - departement-db    
+  departementapp:
+    container_name: departementapp
+    build: .
+    image: deptimage
+    ports:
+     - 9095:9095
+    environment:
+      PORTF: 9095
+    networks:
+      mysubnet:
+        aliases:
+        - departement-app
+    depends_on:
+     - departementdb    
+networks:
+  mysubnet:
+    external: false    
+volumes:
+  data_dept:
+    external: false
+  
+    
